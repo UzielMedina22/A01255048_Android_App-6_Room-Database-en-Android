@@ -8,6 +8,9 @@ import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
+import medina.jonathan.tareasapp.data.AppDatabase
+import medina.jonathan.tareasapp.data.TaskDao
+import medina.jonathan.tareasapp.domain.TaskEntity
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

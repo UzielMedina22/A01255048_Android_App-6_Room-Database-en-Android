@@ -1,9 +1,11 @@
-package medina.jonathan.tareasapp
+package medina.jonathan.tareasapp.data
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import medina.jonathan.tareasapp.data.TaskDao
+import medina.jonathan.tareasapp.domain.TaskEntity
 import kotlin.concurrent.Volatile
 
 @Database(entities = [TaskEntity::class], version = 1)

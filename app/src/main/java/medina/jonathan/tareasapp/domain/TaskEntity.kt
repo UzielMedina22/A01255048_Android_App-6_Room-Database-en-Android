@@ -1,4 +1,4 @@
-package medina.jonathan.tareasapp
+package medina.jonathan.tareasapp.domain
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
