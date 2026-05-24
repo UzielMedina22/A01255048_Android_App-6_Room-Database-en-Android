@@ -35,6 +35,7 @@ fun TaskScreen(
 ) {
     val tasks by viewModel.tasks.collectAsStateWithLifecycle()
     var newTaskText by remember { mutableStateOf("") }
+    val searchInput by viewModel.searchInput.collectAsStateWithLifecycle()
 
     Scaffold { paddingValues ->
         Column(modifier = Modifier.fillMaxSize().padding(paddingValues).padding(horizontal = 16.dp)) {
@@ -43,6 +44,20 @@ fun TaskScreen(
                 style = MaterialTheme.typography.headlineLarge,
                 modifier = Modifier.padding(vertical = 16.dp)
             )
+
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                SearchBar(
+                    searchInput = searchInput,
+                    onSearchInputChanged = { text -> viewModel.onSearchInputChanged(text)},
+                    onSearchClicked = { viewModel.executeSearch() },
+                    modifier = Modifier.weight(1f).padding(bottom = 6.dp)
+                )
+                OrderTasksDropDown(selectSort = { order -> viewModel.setOrder(order) })
+            }
 
             Box(modifier = Modifier.weight(1f)) {
                 if (tasks.isEmpty()) {
