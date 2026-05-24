@@ -1,23 +1,37 @@
 package medina.jonathan.tareasapp
 
 import android.app.Application
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.text.style.TextDecoration.Companion.combine
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
+enum class TasksOrder { RECENT, OLDEST, A_Z, Z_A }
+
 class TaskViewModel(private val taskDao: TaskDao): ViewModel() {
 
-    val tasks: StateFlow<List<TaskEntity>> = taskDao.getAllTasks()
+    private val _searchInput = MutableStateFlow("")
+    val searchInput: StateFlow<String> = _searchInput.asStateFlow()
+
+    private val _activeQuery =  MutableStateFlow("")
+    private val _order =  MutableStateFlow(TasksOrder.RECENT)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val tasks: StateFlow<List<TaskEntity>> = combine(_activeQuery, _order) { q, o -> q to o }
+        .flatMapLatest { (query, order) -> taskDao.searchTasks(query, order) }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
@@ -37,6 +51,18 @@ class TaskViewModel(private val taskDao: TaskDao): ViewModel() {
 
     fun deleteTask(task: TaskEntity) {
         viewModelScope.launch { taskDao.delete(task) }
+    }
+
+    fun onSearchInputChanged(text: String) {
+        _searchInput.value = text
+    }
+
+    fun executeSearch() {
+        _activeQuery.value = _searchInput.value.trim()
+    }
+
+    fun setOrder(order: TasksOrder) {
+        _order.value = order
     }
 
     // Factory

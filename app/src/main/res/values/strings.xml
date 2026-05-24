@@ -9,4 +9,11 @@
     <string name="delete_task_msg">Eliminar tarea</string>
     <string name="delete_task_confirm">Eliminar</string>
     <string name="delete_task_dialog_question">Seguro que quieres eliminar esta tarea?"</string>
+    <string name="search_input_placeholder">Buscar tarea por título</string>
+    <string name="search_button_label">Buscar</string>
+    <string name="show_search_filters">Mostrar filtros</string>
+    <string name="show_by_recent">Ordenar por más recientes</string>
+    <string name="show_by_oldest">Ordenar por más antiguos</string>
+    <string name="show_by_a_z">Ordenar por A-Z</string>
+    <string name="show_by_z_a">Ordenar por Z-A</string>
 </resources>
