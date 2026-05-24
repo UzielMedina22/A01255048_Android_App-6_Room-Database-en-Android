@@ -19,8 +19,8 @@ interface TaskDao {
         ORDER BY 
             CASE WHEN :order = 'RECENT' THEN creado_en END DESC,
             CASE WHEN :order = 'OLDEST' THEN creado_en END ASC,
-            CASE WHEN :order = 'A_Z' THEN titulo END ASC,
-            CASE WHEN :order = 'Z_A' THEN titulo END DESC
+            CASE WHEN :order = 'A_Z' THEN titulo END COLLATE NOCASE ASC,
+            CASE WHEN :order = 'Z_A' THEN titulo END COLLATE NOCASE DESC
     """)
     fun searchTasks(query: String, order: TasksOrder): Flow<List<TaskEntity>>
 
